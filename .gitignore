@@ -1,0 +1,18 @@
+# Hyperfine output files
+*.hyperfine.json
+
+# Downloaded targets and extracted files
+targets/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Local environments or keys
+.env
+.env.local
+.venv/
+env/
+
+# MacOS system files
+.DS_Store
