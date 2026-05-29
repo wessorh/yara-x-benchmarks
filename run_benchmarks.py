@@ -86,12 +86,12 @@ def run_hyperfine(cmd_yara, cmd_yara_x, title):
     """Runs hyperfine to compare legacy yara and yara-x."""
     import uuid
     temp_json = f"/tmp/hyperfine_{uuid.uuid4().hex}.json"
-    print(f"  [*] Scanning: {title}...")
+    print(f"\n[*] Scanning {title}...\n")
     
     hyperfine_cmd = [
         HYPERFINE_PATH,
-        "--warmup", "3",
-        "--min-runs", "10",
+        "--warmup", "1",
+        "--min-runs", "5",
         "--export-json", temp_json,
         "-n", "Legacy YARA",
         cmd_yara,
@@ -146,30 +146,24 @@ def main():
     # Discover which corpora folders are prepared and active
     active_corpora = discover_active_corpora()
     rule_files = discover_rule_files()
-    print(f"\n[*] Active target corpora discovered for scanning: {active_corpora}")
+    print(f"\n[*] Targets discovered: {active_corpora}")
     print(f"[*] Rule files discovered: {rule_files}")
     
     try:
         results_scan = {} # Dict of corpus_name -> {rule_name -> result}
         
         # ---------------------------------------------------------------------
-        # 2. DYNAMIC SCANNING BENCHMARKS PER DISCOVERED CORPUS
+        # DYNAMIC SCANNING BENCHMARKS PER DISCOVERED CORPUS
         # ---------------------------------------------------------------------
         for corpus in active_corpora:
-            corpus_path = os.path.join(TARGETS_DIR, corpus)
-            print(f"\n=========================================")
-            print(f" Scanning corpus '{corpus}'")
-            print("=========================================")
-            
+            corpus_path = os.path.join(TARGETS_DIR, corpus)            
             results_scan[corpus] = {}
             
             for rf in rule_files:
-                rule_path = os.path.join(RULES_DIR, rf)
-                label = rf
-                
-                scan_yara = f"{YARA_PATH} {rule_path} {corpus_path}"
-                scan_yara_x = f"{YARA_X_PATH} scan {rule_path} {corpus_path}"
-                results_scan[corpus][label] = run_hyperfine(scan_yara, scan_yara_x, f"{corpus} ({label})")
+                rule_path = os.path.join(RULES_DIR, rf)                
+                scan_yara = f"{YARA_PATH} --threads=1 {rule_path} {corpus_path}"
+                scan_yara_x = f"{YARA_X_PATH} scan --threads=1 {rule_path} {corpus_path}"
+                results_scan[corpus][rf] = run_hyperfine(scan_yara, scan_yara_x, f"{corpus} with {rf}")
             
         # ---------------------------------------------------------------------
         # RENDER DYNAMIC PERFORMANCE REPORT

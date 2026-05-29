@@ -1,6 +1,6 @@
 import "pe"
 
-rule pe_heavy_module_usage_1 {
+rule pe_1 {
     meta:
         description = "Exercises PE module section parsing"
     condition:
@@ -12,17 +12,8 @@ rule pe_heavy_module_usage_1 {
         )
 }
 
-rule pe_imports_usage_2 {
-    meta:
-        description = "Exercises PE module import resolution"
-    condition:
-        pe.imports("kernel32.dll", "VirtualAlloc") or
-        pe.imports("kernel32.dll", "CreateProcessA") or
-        pe.imports("kernel32.dll", "WriteProcessMemory") or
-        pe.imports("user32.dll", "MessageBoxA")
-}
 
-rule pe_rich_signature_3 {
+rule pe_3 {
     meta:
         description = "Exercises PE rich header checks"
     condition:

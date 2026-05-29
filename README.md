@@ -1,7 +1,4 @@
-# YARA vs YARA-X Dynamic Benchmarking Suite
-
-This repository contains benchmarking suite designed to the performance of legacy C-based **YARA** and the next-generation Rust-based **YARA-X**.
----
+# YARA vs YARA-X Benchmarking Suite
 
 ## 📁 Structured Corpus Architecture
 
@@ -28,6 +25,9 @@ yara-x-benchmarks/
 
 ---
 
+> [!TIP]
+> **Custom Targets Benchmarking**:
+> You do not have to define compressed archives or VT hash lists in the `corpus/` folder to run custom benchmarks. You can simply create your own subdirectory directly inside the `targets/` folder (e.g. `targets/my_custom_corpus/`) and place any set of files you wish to scan inside it. The orchestrator will automatically discover it and include it in your benchmark report the next time you execute `python3 run_benchmarks.py`.
 
 ## 🚀 Quick Start
 
