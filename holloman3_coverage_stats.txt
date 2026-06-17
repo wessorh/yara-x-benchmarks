@@ -1,26 +1,22 @@
 # Holloman3 YARA Rule Coverage Statistics
 
 ## Rule Set
-- Total rules:     1,090 (from 1,107 samples)
+- Unique rules:       854 (deduplicated from 1,090 generated)
 - Skipped:             17 (files < 1,024 bytes, order < 5)
-- Rule file size:  157 KB (holloman3-rules.yar)
-- Unique clusterids: 854 (236 files share fingerprints with at least one other file)
+- Rule file size:  110 KB (holloman3-rules.yar)
+- Duplicates removed: 236 (same clusterid, different filename)
+- 1:1 fingerprint-to-rule mapping
 
 ## Coverage vs Samples
 - Files scanned:    1,107
 - Matched:          1,090 (98.5%)
 - Unmatched:           17 (all files < 1,024 bytes)
-
-## Match Distribution
-- 833 files matched exactly 1 rule   (unique fingerprints)
-- 257 files matched 2+ rules          (content-identical clusters)
-  - 38 files in 2-4 match groups
-  - 17 files in 5-9 match groups
-  - 202 files in 200+ match clusters (same content, different hashes)
+- Multi-match:          0 (every file matches at most one rule)
 
 ## Comparison with yara-rules-full.yar
-- yara-rules-full rules: 11,679 rules matched 832 files
-- holloman3 rules:        1,090 rules matched 1,090 files
+- yara-rules-full rules: 11,679 rules matched 832 files (75%)
+- holloman3 rules:          854 rules matched 1,090 files (98.5%)
+- holloman3 rule file:      110 KB vs 18.4 MB (167x smaller)
 - holloman3 rules are O(1): each file is fingerprinted once,
   then compared against all signatures in constant time
 - 17 files matched traditional rules but not holloman3
@@ -30,3 +26,4 @@
 - Traditional string-matching degrades with rule count (power-law decay)
 - Holloman3 throughput is constant regardless of rule count
 - Adding 1,000 more rules adds negligible per-file cost
+- 854 rules scan in same time as 1 rule: fingerprint computed once per file
